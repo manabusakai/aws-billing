@@ -17,11 +17,10 @@ const (
 	dimensionValue = "USD"
 )
 
-func main() {
+func GetBilling() (float64, error) {
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(region)})
 	if err != nil {
-		fmt.Println("failed to create session,", err)
-		return
+		return 0, err
 	}
 
 	svc := cloudwatch.New(sess)
@@ -46,9 +45,18 @@ func main() {
 
 	resp, err := svc.GetMetricStatistics(params)
 	if err != nil {
+		return 0, err
+	}
+
+	return float64(*resp.Datapoints[0].Maximum), nil
+}
+
+func main() {
+	billing, err := GetBilling()
+	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
-	fmt.Println(resp)
+	fmt.Printf("Billing: %v\n", billing)
 }
