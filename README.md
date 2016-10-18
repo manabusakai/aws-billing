@@ -31,3 +31,7 @@ Billing: 18.83
 
 This command needs to enable billing alerts.
 So, turn on "[Receive Billing Alerts](https://console.aws.amazon.com/billing/home?#/preferences)".
+
+## License
+
+This software is released under the MIT License.
