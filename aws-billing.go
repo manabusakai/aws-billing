@@ -58,5 +58,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Billing: %v\n", billing)
+	fmt.Printf("%v %v\n", dimensionValue, billing)
 }
