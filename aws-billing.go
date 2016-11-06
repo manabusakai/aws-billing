@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -17,10 +18,10 @@ const (
 	dimensionValue = "USD"
 )
 
-func GetBilling() (float64, error) {
+func GetBilling() float64 {
 	sess, err := session.NewSession(&aws.Config{Region: aws.String(region)})
 	if err != nil {
-		return 0, err
+		log.Fatal(err)
 	}
 
 	svc := cloudwatch.New(sess)
@@ -45,18 +46,13 @@ func GetBilling() (float64, error) {
 
 	resp, err := svc.GetMetricStatistics(params)
 	if err != nil {
-		return 0, err
+		log.Fatal(err)
 	}
 
-	return float64(*resp.Datapoints[0].Maximum), nil
+	return float64(*resp.Datapoints[0].Maximum)
 }
 
 func main() {
-	billing, err := GetBilling()
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-
+	billing := GetBilling()
 	fmt.Printf("%v %v\n", dimensionValue, billing)
 }
