@@ -24,9 +24,10 @@ phases:
       - dep ensure
   build:
     commands:
-      - GOOS=linux GOARCH=amd64 go build aws-billing.go
+      - GOOS=linux  GOARCH=amd64 go build -o bin/linux-amd64/aws-billing  aws-billing.go
+      - GOOS=darwin GOARCH=amd64 go build -o bin/darwin-amd64/aws-billing aws-billing.go
 
 artifacts:
   files:
-    - aws-billing
+    - bin/**/*
   base-directory: ${GOPATH}/${SRC_DIR}
