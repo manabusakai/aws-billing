@@ -20,7 +20,7 @@ phases:
   pre_build:
     commands:
       - mkdir -p ${GOPATH}/${SRC_DIR} && cd ${GOPATH}/${SRC_DIR}
-      - mv ${CODEBUILD_SRC_DIR}/* .
+      - mv ${CODEBUILD_SRC_DIR}/* ${CODEBUILD_SRC_DIR}/.??* .
       - dep ensure
   build:
     commands:
