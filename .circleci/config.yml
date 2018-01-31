@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9.2
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get -q install python3
+            curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3 -
+            sudo pip -q install awscli
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t aws-billing .
+      - deploy:
+          name: Push Docker image
+          command: |
+            $(aws ecr get-login --no-include-email --region ap-northeast-1)
+            docker tag aws-billing "${ECR_REPOSITORY_URI}/aws-billing:${CIRCLE_SHA1}"
+            docker push "${ECR_REPOSITORY_URI}/aws-billing:${CIRCLE_SHA1}"
